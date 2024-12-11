@@ -7,8 +7,7 @@ from typing import List
 
 import constants
 from classes import (Person, BufferParams, QCPParams, QCPWindowVector, BufferedAudio, 
-                     LPC, WLP, MagsAndPeaks, DurandKerner, TestVariables, Test, OptimParams,
-                     FormantComparison, CoeffWeightParams)
+                     LPC, WLP, MagsAndPeaks, DurandKerner, TestVariables, Test, CoeffWeightParams)
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -139,32 +138,6 @@ def test_test_object(person: Person, test_variables: TestVariables):
     return test
 
 
-def test_formant_comparison(
-    loss_func: str,
-    optim_func: str,
-    people: List[Person],
-    optim_params: OptimParams,
-):
-    start_time = time.time()
-
-    # Test script
-    comparison = FormantComparison(loss_func=loss_func,
-                             optim_func=optim_func,
-                             people=people,
-                             optim_params=optim_params)
-
-    end_time = time.time()
-    execution_time = round(end_time - start_time, 5)
-    
-    assert len(comparison.optimized_params.keys()) == 1
-
-    print(
-        f'~~~ Formant Comparison Test Passed in {execution_time} s ~~~'
-    )
-
-    return comparison
-
-
 def main():
     dataset_dir = os.path.join(os.path.dirname(os.getcwd()), 'dataset')
     
@@ -178,115 +151,89 @@ def main():
         gender='Cismale',
     )
 
-    # test_buffer_params = BufferParams(
-    #     buffer_size=512,
-    #     hop_size=512,
-    #     window_type='hann',
-    # )
+    test_buffer_params = BufferParams(
+        buffer_size=512,
+        hop_size=512,
+        window_type='hann',
+    )
     
-    # test_qcp_params = QCPParams(
-    #     n_ramp=7,
-    #     duration_quotient=0.8,
-    #     position_quotient=0.05,
-    #     d=1e-5
-    # )
+    test_qcp_params = QCPParams(
+        n_ramp=7,
+        duration_quotient=0.8,
+        position_quotient=0.05,
+        d=1e-5
+    )
     
-    # test_coeff_weight_params = CoeffWeightParams(
-    #     method='sigmoid',
-    #     alpha=0.65,
-    #     beta=1.0
-    # )
+    test_coeff_weight_params = CoeffWeightParams(
+        method='sigmoid',
+        alpha=0.65,
+        beta=1.0
+    )
 
-    # test_test_variables_1 = TestVariables(
-    #     buffer_params=test_buffer_params,
-    #     qcp_params=test_qcp_params,
-    #     coeff_weight_params=test_coeff_weight_params,
-    #     filter_order=42,
-    #     formant_method="magsandpeaks",
-    #     num_formants=constants.NUM_FORMANTS,
-    # )
+    test_test_variables_1 = TestVariables(
+        buffer_params=test_buffer_params,
+        qcp_params=test_qcp_params,
+        coeff_weight_params=test_coeff_weight_params,
+        filter_order=42,
+        formant_method="magsandpeaks",
+        num_formants=constants.NUM_FORMANTS,
+    )
 
-    # test_test_variables_2 = TestVariables(
-    #     buffer_params=test_buffer_params,
-    #     qcp_params=test_qcp_params,
-    #     coeff_weight_params=test_coeff_weight_params,
-    #     filter_order=42,
-    #     formant_method="durandkerner",
-    #     num_formants=constants.NUM_FORMANTS,
-    # )
+    test_test_variables_2 = TestVariables(
+        buffer_params=test_buffer_params,
+        qcp_params=test_qcp_params,
+        coeff_weight_params=test_coeff_weight_params,
+        filter_order=42,
+        formant_method="durandkerner",
+        num_formants=constants.NUM_FORMANTS,
+    )
 
-    # #Test buffered_audio object
-    # buffered_audio_dict = buffered_audio_test(
-    #     person=test_person, 
-    #     buffer_params=test_test_variables_1.buffer_params,
-    #     qcp_params=test_qcp_params)
+    #Test buffered_audio object
+    buffered_audio_dict = buffered_audio_test(
+        person=test_person, 
+        buffer_params=test_test_variables_1.buffer_params,
+        qcp_params=test_qcp_params)
 
-    # test_buffered_audio = buffered_audio_dict['ee']
+    test_buffered_audio = buffered_audio_dict['ee']
 
-    # # Test LPC calculations
-    # lpc = lpc_test(test_buffered_audio)
-    # lpc_coeffs = lpc.coeffs
-    # num_formants = constants.NUM_FORMANTS
-
-    # # # Mags and Peaks testing
-    # # mags_and_peaks_lpc = mags_and_peaks_test(coeffs=coeffs,
-    # #                                      num_formants=num_formants)
-
-    # # # Durand Kerner testing
-    # # durand_kerner_lpc = durand_kerner_test(coeffs=coeffs,
-    # #                                    num_formants=num_formants)
-    
-    # # Test WLP calculations
-    # wlp = wlp_test(test_buffered_audio)
-    # wlp_coeffs = wlp.coeffs
-    # num_formants = constants.NUM_FORMANTS
+    # Test LPC calculations
+    lpc = lpc_test(test_buffered_audio)
+    lpc_coeffs = lpc.coeffs
+    num_formants = constants.NUM_FORMANTS
 
     # # Mags and Peaks testing
-    # mags_and_peaks_wlp = mags_and_peaks_test(coeffs=wlp_coeffs,
+    # mags_and_peaks_lpc = mags_and_peaks_test(coeffs=coeffs,
     #                                      num_formants=num_formants)
 
     # # Durand Kerner testing
-    # durand_kerner_wlp = durand_kerner_test(test_coeff_weight_params,
-    #                                        coeffs=wlp_coeffs,
-    #                                        num_formants=num_formants)
-
-    # # Test & TestVariables object testing
-    # test1 = test_test_object(person=test_person,
-    #                          test_variables=test_test_variables_1)
-
-    # test2 = test_test_object(person=test_person,
-    #                          test_variables=test_test_variables_2)
-
-    # print(test1.formant_values['lpc'])
-    # print(test1.formant_values['wlp'])
-    # print(test2.formant_values['lpc'])
-    # print(test2.formant_values['wlp'])
+    # durand_kerner_lpc = durand_kerner_test(coeffs=coeffs,
+    #                                    num_formants=num_formants)
     
-    # Param order:
-    # buffersize, hopsize, filterorder, formantmethod, numformants, windowtype
-    values_or_bounds = [1024, # buffer size
-                        (20,64), # grid search filter order
-                        512, # hop size
-                        'durandkerner', #formant method
-                        3, # num formants
-                        'rectangle', # window type
-                        7, # N_ramp
-                        0.8, # duration quotient
-                        0.05, # position_quotient
-                        1e-5, # static 'd' value
-                        'sigmoid', # coeff weighting method
-                        0.65, # sigmoid alpha
-                        1.0, # beta value,
-                        'wlp', # lp_type
-                        ]
-    optim_params = OptimParams(values_or_bounds=values_or_bounds)
-    
-    formant_comparison = test_formant_comparison(loss_func='mse',
-                                                 optim_func='shgo',
-                                                 people=[test_person],
-                                                 optim_params=optim_params)
-    
-    print(formant_comparison.optimized_params)
+    # Test WLP calculations
+    wlp = wlp_test(test_buffered_audio)
+    wlp_coeffs = wlp.coeffs
+    num_formants = constants.NUM_FORMANTS
+
+    # Mags and Peaks testing
+    mags_and_peaks_wlp = mags_and_peaks_test(coeffs=wlp_coeffs,
+                                         num_formants=num_formants)
+
+    # Durand Kerner testing
+    durand_kerner_wlp = durand_kerner_test(test_coeff_weight_params,
+                                           coeffs=wlp_coeffs,
+                                           num_formants=num_formants)
+
+    # Test & TestVariables object testing
+    test1 = test_test_object(person=test_person,
+                             test_variables=test_test_variables_1)
+
+    test2 = test_test_object(person=test_person,
+                             test_variables=test_test_variables_2)
+
+    print(test1.formant_values['lpc'])
+    print(test1.formant_values['wlp'])
+    print(test2.formant_values['lpc'])
+    print(test2.formant_values['wlp'])
 
 
 if __name__ == '__main__':

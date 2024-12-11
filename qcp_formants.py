@@ -2,8 +2,7 @@ import os
 import numpy as np
 import constants
 from classes import (Person, BufferParams, QCPParams, QCPWindowVector, BufferedAudio, 
-                     LPC, WLP, MagsAndPeaks, DurandKerner, TestVariables, Test, OptimParams,
-                     FormantComparison, CoeffWeightParams)
+                     LPC, WLP, MagsAndPeaks, DurandKerner, TestVariables, Test, CoeffWeightParams)
 from tqdm import tqdm
 
 # Get updated people dictionary
